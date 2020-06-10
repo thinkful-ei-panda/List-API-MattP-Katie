@@ -2,16 +2,41 @@
 
 const BASE_URL = 'https://thinkful-list-api.herokuapp.com/katie&MattP';
 
+
+
+const listApiFetch = (...args) => {
+  let error;
+  return fetch(...args)
+    .then(res => {
+      if(!res.ok) {
+        error = { code: res.status };
+
+        if (!res.headers.get('content-type').includes('json')) {
+          error.message = res.statusText;
+          return Promise.reject(error);
+        }
+      }
+
+      return res.json();
+    })
+    .then(data => {
+      if (error) {
+        error.message = data.message;
+        return Promise.reject(error);
+      }
+      return data;
+    });
+};
+
 function getItems() {
-  return fetch(`${BASE_URL}/items`);
+  return listApiFetch(`${BASE_URL}/items`);
 }
 
 const createItem = (name) => {
   const newItem = JSON.stringify( {
     name: name
   });
-  
-  return fetch(`${BASE_URL}/items`, 
+  return listApiFetch(`${BASE_URL}/items`, 
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -20,12 +45,19 @@ const createItem = (name) => {
 };
 
 const updateItem = (id, updateData) => {
- 
-  return fetch(`${BASE_URL}/items/${id}`, 
+  const newData = JSON.stringify(updateData);
+  return listApiFetch(`${BASE_URL}/items/${id}`, 
     {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: updateData
+      body: newData
+    });
+};
+
+const deleteItem = (id) => {
+  return listApiFetch(`${BASE_URL}/items/${id}`, 
+    {
+      method: 'DELETE'
     });
 };
 
@@ -34,5 +66,6 @@ const updateItem = (id, updateData) => {
 export default {
   getItems,
   createItem,
-  updateItem
+  updateItem,
+  deleteItem
 };
