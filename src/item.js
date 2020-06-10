@@ -1,4 +1,4 @@
-import cuid from 'cuid';
+/*import cuid from 'cuid';
 
 const validateName = function (name) {
   if (!name) throw new TypeError('Name must not be blank');
@@ -15,4 +15,4 @@ const create = function (name) {
 export default {
   validateName,
   create
-};
+};*/
