@@ -10,6 +10,8 @@ const findById = function (id) {
 
 const addItem = function (item) {
   this.items.push(item);
+  console.log(items)
+  console.log(this.items)
 };
 
 const setError = function (error) {
